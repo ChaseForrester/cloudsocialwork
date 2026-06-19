@@ -956,6 +956,9 @@ p {
   font-size: 3rem;
   color: #fff;
 }
+[data-theme="dark"] .enquiry-left h2 {
+  color: #000;
+}
 
 .enquiry-right {
   background: var(--secondary-bg);
