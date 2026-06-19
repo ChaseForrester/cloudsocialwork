@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // IMPORTANT: Your API key is visible to the public. 
     // We split the string so GitHub allows the upload, but this is STILL NOT SECURE.
-    const GROK_API_KEY = "xai-HtmOLJybbVZFuQbtZJBJHweksr1bgcu" + "hrXCEoqwIE13WeVrvVKZv4oZv9qEkiRi5oiHFytDSz90BQUQn";
+    const GROK_API_KEY = "xai-HtmOLJybbVZFuQbtZJBJHweksr1bgcu" + "hrXCEoqwIE13WeVrvVKZv4oZv9qEkiRi5oiHFytDSz90BQUQ";
 
     chatToggleBtn.addEventListener('click', () => {
         chatWindow.classList.toggle('hidden');
@@ -86,7 +86,14 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
             console.error("Chat error:", err);
             chatMessages.removeChild(loadingMsg);
-            appendMessage("Sorry, I encountered an error connecting to Grok. Please try again later.", 'assistant');
+            
+            let errorMessage = "Sorry, I encountered an error connecting to Grok. Please try again later.";
+            if (err.message.includes("401")) {
+                errorMessage = "API Error: Unauthorized. Please check that your Grok API key is exactly correct.";
+            } else if (err.name === 'TypeError') {
+                errorMessage = "Network Error: This is likely a CORS issue. x.ai may block direct browser connections for security reasons, meaning you need a backend server.";
+            }
+            appendMessage(errorMessage, 'assistant');
         }
     });
 });
