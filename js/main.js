@@ -145,10 +145,6 @@ document.addEventListener('DOMContentLoaded', function() {
       <button id="btn-a11y" class="widget-btn" aria-label="Accessibility Menu">
         <svg viewBox="0 0 24 24"><path d="M12 2c2.76 0 5 2.24 5 5s-2.24 5-5 5-5-2.24-5-5 2.24-5 5-5zm0 11.5c-3.33 0-10 1.67-10 5v3.5h20v-3.5c0-3.33-6.67-5-10-5z"/></svg>
       </button>
-      <!-- Chatbot Button -->
-      <button id="btn-chat" class="widget-btn" aria-label="Chat with Support">
-        <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
-      </button>
     </div>
 
     <!-- Accessibility Panel -->
@@ -162,48 +158,16 @@ document.addEventListener('DOMContentLoaded', function() {
       <button id="a11y-font-increase" class="a11y-btn">Increase Font Size</button>
       <button id="a11y-font-reset" class="a11y-btn">Reset Font Size</button>
     </div>
-
-    <!-- Chatbot Panel -->
-    <div id="panel-chat" class="chatbot-panel">
-      <div class="chat-header">
-        <div class="chat-title">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-          Support Assistant
-        </div>
-        <button id="chat-close" class="chat-close">&times;</button>
-      </div>
-      <div id="chat-body" class="chat-body">
-        <div class="chat-message bot">Hello! I'm the Cloud Social Work virtual assistant. How can I help you today?</div>
-      </div>
-      <div class="chat-input-area">
-        <input type="text" id="chat-input" class="chat-input" placeholder="Type a message...">
-        <button id="chat-send" class="chat-send">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-        </button>
-      </div>
-    </div>
   `;
 
   document.body.insertAdjacentHTML('beforeend', widgetHTML);
 
   // Widget Logic
   const btnA11y = document.getElementById('btn-a11y');
-  const btnChat = document.getElementById('btn-chat');
   const panelA11y = document.getElementById('panel-a11y');
-  const panelChat = document.getElementById('panel-chat');
 
   btnA11y.addEventListener('click', () => {
     panelA11y.classList.toggle('open');
-    panelChat.classList.remove('open');
-  });
-
-  btnChat.addEventListener('click', () => {
-    panelChat.classList.toggle('open');
-    panelA11y.classList.remove('open');
-  });
-
-  document.getElementById('chat-close').addEventListener('click', () => {
-    panelChat.classList.remove('open');
   });
 
   document.getElementById('a11y-close').addEventListener('click', () => {
@@ -252,51 +216,6 @@ document.addEventListener('DOMContentLoaded', function() {
     </filter>
   `;
   document.body.appendChild(svg);
-
-  // Chatbot Logic
-  const chatInput = document.getElementById('chat-input');
-  const chatSend = document.getElementById('chat-send');
-  const chatBody = document.getElementById('chat-body');
-
-  function addMessage(text, sender) {
-    const msg = document.createElement('div');
-    msg.className = `chat-message ${sender}`;
-    msg.textContent = text;
-    chatBody.appendChild(msg);
-    chatBody.scrollTop = chatBody.scrollHeight;
-  }
-
-  function handleUserMessage() {
-    const text = chatInput.value.trim();
-    if (!text) return;
-    
-    addMessage(text, 'user');
-    chatInput.value = '';
-
-    setTimeout(() => {
-      const lower = text.toLowerCase();
-      let reply = "I'm not sure about that. You can contact us directly via the Contact page or call 0451 011 473.";
-      
-      if (lower.includes('book') || lower.includes('appointment')) {
-        reply = "You can book an adventure or therapy session by clicking the 'BOOK IN' link in the top menu!";
-      } else if (lower.includes('ndis')) {
-        reply = "Yes, we work with NDIS! You can find our NDIS Pricing Guide on the Documents page.";
-      } else if (lower.includes('hours') || lower.includes('open')) {
-        reply = "We are open Monday-Friday 9am-5pm, and Saturday 9am-Noon. We are closed on Sundays.";
-      } else if (lower.includes('where') || lower.includes('location')) {
-        reply = "We proudly serve the Illawarra, Nowra, and Sydney regions.";
-      } else if (lower.includes('hello') || lower.includes('hi')) {
-        reply = "Hi there! How can I assist you with Cloud Social Work today?";
-      }
-
-      addMessage(reply, 'bot');
-    }, 600);
-  }
-
-  chatSend.addEventListener('click', handleUserMessage);
-  chatInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') handleUserMessage();
-  });
 
   // ===================================
   // Testimonials Slider Logic
