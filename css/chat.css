@@ -34,7 +34,7 @@
 
 .chat-window {
     position: absolute;
-    bottom: 80px;
+    bottom: calc(100% + 15px);
     right: 0;
     width: 350px;
     height: 500px;

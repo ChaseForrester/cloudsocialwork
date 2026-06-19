@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatWindow = document.getElementById('chat-window');
     const chatCloseBtn = document.getElementById('chat-close-btn');
     const chatInputForm = document.getElementById('chat-input-form');
-    const chatInput = document.getElementById('chat-input');
+    const chatInput = document.getElementById('user-query-input');
     const chatMessages = document.getElementById('chat-messages');
 
     // IMPORTANT: Replace this with your actual Grok API Key
