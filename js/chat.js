@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // IMPORTANT: Your API key is visible to the public. 
     // We split the string so GitHub allows the upload, but this is STILL NOT SECURE.
-    const GROK_API_KEY = "xai-HtmOLJybbVZFuQbtZJBJHweksr1bgcu" + "hrXCEoqwIE13WeVrvVKZv4oZv9qEkiRi5oiHFytDSz90BQUQ";
+    const GEMINI_API_KEY = "AQ.Ab8RN6KdOsRJaO7xvhl66D" + "EWF6O7Pb1B7NQPvOWTh6ofVVoOyw";
 
     chatToggleBtn.addEventListener('click', () => {
         chatWindow.classList.toggle('hidden');
@@ -43,33 +43,32 @@ document.addEventListener('DOMContentLoaded', () => {
         appendMessage(text, 'user');
         chatInput.value = '';
 
-        if (GROK_API_KEY === "YOUR_GROK_API_KEY") {
-            appendMessage("Please open js/chat.js and replace 'YOUR_GROK_API_KEY' with your actual Grok API Key to enable the assistant.", 'assistant');
+        if (GEMINI_API_KEY === "YOUR_GEMINI_API_KEY") {
+            appendMessage("Please open js/chat.js and replace 'YOUR_GEMINI_API_KEY' with your actual Gemini API Key to enable the assistant.", 'assistant');
             return;
         }
 
         const loadingMsg = appendMessage("Thinking...", 'assistant loading');
 
         try {
-            const response = await fetch('https://api.x.ai/v1/chat/completions', {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${GROK_API_KEY}`
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    model: "grok-beta", // Using grok-beta for text completion
-                    messages: [
-                        {
-                            role: "system",
-                            content: "You are the Cloud Social Work AI assistant. You help answer questions about Cloud Social Work's services. We offer Therapeutic Supports for the NDIS (for NDIA Managed, Plan Managed, and Self Managed participants) and comprehensive Social Work services across Wollongong, Sydney, and Nowra. Keep your answers helpful, compassionate, and concise."
-                        },
+                    systemInstruction: {
+                        parts: [{ text: "You are the Cloud Social Work AI assistant. You help answer questions about Cloud Social Work's services. We offer Therapeutic Supports for the NDIS (for NDIA Managed, Plan Managed, and Self Managed participants) and comprehensive Social Work services across Wollongong, Sydney, and Nowra. Keep your answers helpful, compassionate, and concise." }]
+                    },
+                    contents: [
                         {
                             role: "user",
-                            content: text
+                            parts: [{ text: text }]
                         }
                     ],
-                    temperature: 0.7
+                    generationConfig: {
+                        temperature: 0.7
+                    }
                 })
             });
 
@@ -78,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const data = await response.json();
-            const reply = data.choices[0].message.content;
+            const reply = data.candidates[0].content.parts[0].text;
             
             chatMessages.removeChild(loadingMsg);
             appendMessage(reply, 'assistant');
@@ -87,11 +86,11 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Chat error:", err);
             chatMessages.removeChild(loadingMsg);
             
-            let errorMessage = "Sorry, I encountered an error connecting to Grok. Please try again later.";
-            if (err.message.includes("401")) {
-                errorMessage = "API Error: Unauthorized. Please check that your Grok API key is exactly correct.";
+            let errorMessage = "Sorry, I encountered an error connecting to Gemini. Please try again later.";
+            if (err.message.includes("400")) {
+                errorMessage = "API Error: Bad Request. Please check your API key.";
             } else if (err.name === 'TypeError') {
-                errorMessage = "Network Error: This is likely a CORS issue. x.ai may block direct browser connections for security reasons, meaning you need a backend server.";
+                errorMessage = "Network Error: Please check your internet connection.";
             }
             appendMessage(errorMessage, 'assistant');
         }
