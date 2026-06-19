@@ -38,30 +38,30 @@
 
 [data-theme="dark"] {
   /* Dark Theme */
-  --bg-color: #000000;
+  --bg-color: #0a0a2e;
   --text-color: #ffffff;
   --text-muted: rgba(255, 255, 255, 0.75);
   --primary-color: #ffffff;
-  --secondary-bg: #111111;
-  --accent-color: #333333;
-  --border-color: #222222;
+  --secondary-bg: #111133;
+  --accent-color: #1a1a3e;
+  --border-color: #222244;
   
-  --nav-bg: rgba(0, 0, 0, 0.95);
+  --nav-bg: rgba(10, 10, 46, 0.95);
   --nav-text: #ffffff;
   
-  --card-bg: #111111;
+  --card-bg: #111133;
   --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
   --card-hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.8);
   
-  --form-bg: #1a1a1a;
-  --form-border: #333333;
+  --form-bg: #1a1a3e;
+  --form-border: #333366;
   --form-text: #ffffff;
   
   --btn-bg: #ffffff;
-  --btn-text: #000000;
+  --btn-text: #0a0a2e;
   --btn-hover: #e0e0e0;
   
-  --footer-bg: #0a0a2e; /* Keep footer dark even in dark mode for brand consistency */
+  --footer-bg: #05051a;
   --footer-text: #ffffff;
   
   --inverse-text: #000000;
@@ -2603,4 +2603,86 @@ html[data-contrast="high"] * {
 }
 .navbar-top .nav-menu .btn-cta::after {
   display: none; /* remove hover line */
+}
+
+/* ==========================================================================
+   Interactive Core Values Section (about-us.html)
+   ========================================================================== */
+.interactive-values-section {
+    padding: 80px 24px;
+    background-color: var(--secondary-bg);
+    text-align: center;
+}
+
+.values-grid {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 40px auto 0;
+}
+
+.value-card {
+    background-color: transparent;
+    width: 300px;
+    height: 200px;
+    perspective: 1000px;
+    cursor: pointer;
+}
+
+.value-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+    transform-style: preserve-3d;
+    border-radius: 12px;
+    box-shadow: var(--card-shadow);
+}
+
+.value-card:hover .value-card-inner {
+    transform: rotateY(180deg);
+}
+
+.value-card-front, .value-card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.value-card-front {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+.value-card-front h3 {
+    color: var(--primary-color);
+    font-size: 24px;
+    margin: 0;
+}
+
+.value-card-back {
+    background-color: var(--primary-color);
+    color: var(--inverse-text);
+    transform: rotateY(180deg);
+    border: 1px solid var(--border-color);
+}
+
+[data-theme="dark"] .value-card-back {
+    color: #000;
+}
+
+.value-card-back p {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.5;
 }

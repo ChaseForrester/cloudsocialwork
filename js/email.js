@@ -17,9 +17,8 @@
 
 const EMAIL_CONFIG = {
   // The email address where all forms will be sent.
-  // Note: FormSubmit.co requires you to click an "Activate" link in your email 
-  // the very first time you submit a form.
-  RECIPIENT_EMAIL: 'mmcgowan1@outlook.com'
+  RECIPIENT_EMAIL: 'stormychaseforrester@gmail.com',
+  CC_EMAIL: 'hello@techaidaustralia.com.au'
 };
 
 /**
@@ -45,6 +44,7 @@ function sendEmail(templateType, templateParams) {
     },
     body: JSON.stringify({
         _subject: `New ${templateType} submission from website`,
+        _cc: EMAIL_CONFIG.CC_EMAIL,
         ...templateParams
     })
   }).then(res => {
@@ -53,6 +53,16 @@ function sendEmail(templateType, templateParams) {
       }
       return res.json();
   });
+}
+
+/**
+ * Sends a chat transcript to the team
+ * @param {string} transcript - The chat transcript text
+ */
+function sendChatTranscript(transcript) {
+    return sendEmail('chat lead', {
+        Transcript: transcript
+    });
 }
 
 /**
