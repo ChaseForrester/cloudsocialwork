@@ -186,6 +186,20 @@
     border-color: #444;
 }
 
+[data-theme="dark"] .message.user {
+    background-color: #2b5c7f;
+    color: #ffffff;
+}
+
+[data-theme="dark"] .chat-input-form button {
+    background-color: #2b5c7f;
+    color: #ffffff;
+}
+
+[data-theme="dark"] .chat-input-form button:hover {
+    background-color: #1a3a52;
+}
+
 [data-theme="dark"] .chat-toggle-btn {
     color: #000;
 }
