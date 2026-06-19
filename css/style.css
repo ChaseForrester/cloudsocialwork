@@ -1110,6 +1110,11 @@ p {
   opacity: 0.6;
 }
 
+[data-theme="dark"] .form-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+  opacity: 1;
+}
+
 .form-textarea {
   min-height: 120px;
   resize: vertical;
@@ -2548,6 +2553,9 @@ html[data-contrast="high"] * {
 .filter-btn:hover, .filter-btn.active {
     background: var(--primary-color);
     color: #fff;
+}
+[data-theme="dark"] .filter-btn:hover, [data-theme="dark"] .filter-btn.active {
+    color: #000;
 }
 .sort-box select {
     padding: 0.8rem 1.2rem;
