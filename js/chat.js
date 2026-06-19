@@ -39,15 +39,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function parseMarkdown(text) {
+        let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        html = html.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" style="text-decoration: underline;">$1</a>');
+        html = html.replace(/\n/g, '<br>');
+        return html;
+    }
+
     function appendMessage(text, sender) {
         const msgDiv = document.createElement('div');
         // Handle loading class correctly
         if (sender === 'assistant loading') {
             msgDiv.className = `message assistant loading`;
+            msgDiv.textContent = text;
         } else {
             msgDiv.className = `message ${sender}`;
+            msgDiv.dataset.rawText = text;
+            msgDiv.innerHTML = parseMarkdown(text);
         }
-        msgDiv.textContent = text;
         chatMessages.appendChild(msgDiv);
         chatMessages.scrollTop = chatMessages.scrollHeight;
         return msgDiv;
@@ -70,6 +80,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const loadingMsg = appendMessage("Thinking...", 'assistant loading');
 
         try {
+            const historyElements = Array.from(chatMessages.querySelectorAll('.message:not(.loading)'));
+            const contents = historyElements.map(el => {
+                const role = el.classList.contains('user') ? 'user' : 'model';
+                const rawText = el.dataset.rawText || el.textContent;
+                return {
+                    role: role,
+                    parts: [{ text: rawText }]
+                };
+            });
+
             const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${GEMINI_API_KEY}`, {
                 method: 'POST',
                 headers: {
@@ -79,12 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     systemInstruction: {
                         parts: [{ text: "You are the Cloud Social Work AI assistant. You help answer questions about Cloud Social Work's services. We offer Therapeutic Supports for the NDIS (for NDIA Managed, Plan Managed, and Self Managed participants) and comprehensive Social Work services across Wollongong, Sydney, and Nowra. Keep your answers helpful, compassionate, and concise. IMPORTANT INFO to give users if asked: Contact Email is mmcgowan1@outlook.com. Phone number is 0451 011 473. Quick links to our pages: Home (index.html), About Us (about-us.html), Contact Us (faq.html), Events (events.html), Blog (blog.html), Book In (book-in.html), Laws/Documents (documents.html), Therapeutic Supports (therapeutic-supports.html), Social Work Services (social-work.html). SIMPLE FAQ: Q: Do you work with NDIS? A: Yes, we provide supports for NDIA Managed, Plan Managed, and Self Managed NDIS participants. Q: What are your hours? A: We are open Monday-Friday 9am-5pm, and Saturday 9am-Noon. Q: Where are you located? A: We serve the Illawarra, Nowra, and Sydney regions. Q: How do I book an appointment? A: You can book via the 'BOOK IN' link or page. LEAD COLLECTION: If a user wants to leave their contact details or make an inquiry, you DO NOT need to point them to a form. You can act as the form! Ask them for their Name, Phone Number, and what they need help with. Once they provide it, tell them 'Thank you, I have passed your details to our team and we will be in touch shortly!'" }]
                     },
-                    contents: [
-                        {
-                            role: "user",
-                            parts: [{ text: text }]
-                        }
-                    ],
+                    contents: contents,
                     generationConfig: {
                         temperature: 0.7
                     }

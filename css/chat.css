@@ -79,6 +79,11 @@
     line-height: 1;
 }
 
+[data-theme="dark"] .chat-header h3,
+[data-theme="dark"] .chat-header button {
+    color: #000;
+}
+
 .chat-messages {
     flex-grow: 1;
     padding: 16px;
