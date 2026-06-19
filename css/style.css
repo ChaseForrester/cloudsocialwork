@@ -2327,7 +2327,7 @@ html[data-theme="light"] .footer-brand img {
 .a11y-panel {
   position: fixed;
   bottom: 80px;
-  right: 2rem;
+  left: 2rem;
   width: 250px;
   background: var(--card-bg);
   border: 1px solid var(--border-color);
