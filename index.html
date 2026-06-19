@@ -295,6 +295,14 @@
             </div>
             <div id="chat-messages" class="chat-messages">
                 <div class="message assistant">Hello! I'm the Cloud Social Work AI assistant (powered by Gemini). How can I help you learn about our services today?</div>
+                <div class="chat-quick-replies" id="chat-quick-replies">
+                    <button class="quick-reply-btn">Do you work with NDIS?</button>
+                    <button class="quick-reply-btn">What are your hours?</button>
+                    <button class="quick-reply-btn">Where are you located?</button>
+                    <button class="quick-reply-btn">How do I book an appointment?</button>
+                    <button class="quick-reply-btn">What services do you offer?</button>
+                </div>
+                <div class="message assistant" id="chat-quick-reply-prompt" style="font-size: 12px; padding: 0px 5px; background-color: transparent; border: none; margin-top: -5px;">Feel free to click a question above or ask me anything you like!</div>
             </div>
             <form id="chat-input-form" class="chat-input-form">
                 <input type="text" id="user-query-input" name="user-query" placeholder="Type a message..." autocomplete="off">

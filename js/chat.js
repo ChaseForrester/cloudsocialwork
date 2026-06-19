@@ -21,6 +21,24 @@ document.addEventListener('DOMContentLoaded', () => {
         chatWindow.classList.add('hidden');
     });
 
+    const quickReplyContainer = document.getElementById('chat-quick-replies');
+    const quickReplyPrompt = document.getElementById('chat-quick-reply-prompt');
+    const quickReplyBtns = document.querySelectorAll('.quick-reply-btn');
+
+    quickReplyBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            chatInput.value = btn.textContent;
+            chatInputForm.dispatchEvent(new Event('submit'));
+        });
+    });
+
+    function hideQuickReplies() {
+        if (quickReplyContainer && quickReplyPrompt) {
+            quickReplyContainer.style.display = 'none';
+            quickReplyPrompt.style.display = 'none';
+        }
+    }
+
     function appendMessage(text, sender) {
         const msgDiv = document.createElement('div');
         // Handle loading class correctly
@@ -40,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const text = chatInput.value.trim();
         if (!text) return;
 
+        hideQuickReplies();
         appendMessage(text, 'user');
         chatInput.value = '';
 

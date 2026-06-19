@@ -184,3 +184,38 @@
 [data-theme="dark"] .chat-toggle-btn {
     color: #000;
 }
+
+.chat-quick-replies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
+.quick-reply-btn {
+    background-color: transparent;
+    color: var(--primary-color, #2b5c7f);
+    border: 1px solid var(--primary-color, #2b5c7f);
+    border-radius: 16px;
+    padding: 6px 12px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Figtree', sans-serif;
+}
+
+.quick-reply-btn:hover {
+    background-color: var(--primary-color, #2b5c7f);
+    color: white;
+}
+
+[data-theme="dark"] .quick-reply-btn {
+    color: #e0e0e0;
+    border-color: #e0e0e0;
+}
+
+[data-theme="dark"] .quick-reply-btn:hover {
+    background-color: #e0e0e0;
+    color: #000;
+}
