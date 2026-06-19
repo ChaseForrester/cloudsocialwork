@@ -16,50 +16,43 @@
  */
 
 const EMAIL_CONFIG = {
-  SERVICE_ID: 'YOUR_SERVICE_ID',        // Replace with your EmailJS Service ID
-  PUBLIC_KEY: 'YOUR_PUBLIC_KEY',         // Replace with your EmailJS Public Key
-  TEMPLATES: {
-    contact: 'YOUR_CONTACT_TEMPLATE_ID',  // Template for Contact Us / FAQ forms
-    enquiry: 'YOUR_ENQUIRY_TEMPLATE_ID',  // Template for About Us enquiry form
-    booking: 'YOUR_BOOKING_TEMPLATE_ID',  // Template for Book In multi-step form
-  },
+  // The email address where all forms will be sent.
+  // Note: FormSubmit.co requires you to click an "Activate" link in your email 
+  // the very first time you submit a form.
   RECIPIENT_EMAIL: 'mmcgowan1@outlook.com'
 };
 
 /**
- * Initialize EmailJS
- * Add this script tag to your HTML: <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+ * No initialization needed for FormSubmit
  */
 function initEmailJS() {
-  if (typeof emailjs !== 'undefined') {
-    emailjs.init(EMAIL_CONFIG.PUBLIC_KEY);
-    console.log('EmailJS initialized successfully');
-  } else {
-    console.warn('EmailJS library not loaded. Forms will use mailto: fallback.');
-  }
+  console.log('Using FormSubmit.co for email processing.');
 }
 
 /**
- * Send email via EmailJS
+ * Send email via FormSubmit AJAX
  * @param {string} templateType - 'contact', 'enquiry', or 'booking'
  * @param {Object} templateParams - Key-value pairs for the email template
  * @returns {Promise}
  */
 function sendEmail(templateType, templateParams) {
-  // Add recipient email to params
-  templateParams.to_email = EMAIL_CONFIG.RECIPIENT_EMAIL;
-  templateParams.reply_to = templateParams.email || templateParams.from_email || '';
-
-  if (typeof emailjs !== 'undefined' && EMAIL_CONFIG.SERVICE_ID !== 'YOUR_SERVICE_ID') {
-    return emailjs.send(
-      EMAIL_CONFIG.SERVICE_ID,
-      EMAIL_CONFIG.TEMPLATES[templateType],
-      templateParams
-    );
-  } else {
-    // Fallback: use mailto link
-    return fallbackMailto(templateType, templateParams);
-  }
+  // Send the email via FormSubmit.co AJAX API
+  return fetch(`https://formsubmit.co/ajax/${EMAIL_CONFIG.RECIPIENT_EMAIL}`, {
+    method: "POST",
+    headers: { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    },
+    body: JSON.stringify({
+        _subject: `New ${templateType} submission from website`,
+        ...templateParams
+    })
+  }).then(res => {
+      if (!res.ok) {
+          throw new Error("Failed to send email");
+      }
+      return res.json();
+  });
 }
 
 /**
