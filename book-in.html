@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book In Now - Cloud Social Work</title>
+    <meta name="description" content="Book your next adventure or support session with Cloud Social Work. Easy 8-step online booking form for new and returning clients.">
+    <link rel="icon" href="https://cdn.prod.website-files.com/66691c8dd608efff5cd4843d/66691d9aa3f93414bb8f8b39_imresizer-1718164884165.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="multistep-page">
+
+    <!-- Top Navbar -->
+    <nav class="navbar-top">
+        <div class="navbar-container">
+            <a href="index.html" class="logo">
+                <img src="https://cdn.prod.website-files.com/66691c8dd608efff5cd4843d/666ae4055fa1c07f27951fd8_Blue%20White.png" alt="Cloud Social Work Logo">
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="about-us.html">ABOUT</a></li>
+                <li><a href="faq.html">CONTACT</a></li>
+                <li><a href="events.html">EVENTS</a></li>
+                <li><a href="blog.html">BLOG</a></li>
+                <li><a href="book-in.html" class="active">BOOK IN</a></li>
+            </ul>
+            <div class="menu-button">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Side Navbar (Mobile) -->
+    <div class="navbar-side">
+        <a href="index.html" class="side-logo">
+            <img src="https://cdn.prod.website-files.com/66691c8dd608efff5cd4843d/666ae4055fa1c07f27951fd8_Blue%20White.png" alt="Cloud Social Work Logo">
+        </a>
+        <ul class="side-nav-menu">
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="about-us.html">ABOUT</a></li>
+            <li><a href="faq.html">CONTACT</a></li>
+            <li><a href="events.html">EVENTS</a></li>
+            <li><a href="blog.html">BLOG</a></li>
+            <li><a href="book-in.html" class="active">BOOK IN</a></li>
+        </ul>
+    </div>
+    <div class="nav-overlay"></div>
+
+    <!-- Multi-Step Form Layout -->
+    <main class="multistep-wrapper animate-on-scroll">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="multistep-sidebar">
+            <div class="step-tab active">
+                <div class="step-number">1</div>
+                <div class="step-label">Welcome</div>
+            </div>
+            <div class="step-tab">
+                <div class="step-number">2</div>
+                <div class="step-label">Healthcare</div>
+            </div>
+            <div class="step-tab">
+                <div class="step-number">3</div>
+                <div class="step-label">Gender</div>
+            </div>
+            <div class="step-tab">
+                <div class="step-number">4</div>
+                <div class="step-label">Health</div>
+            </div>
+            <div class="step-tab">
+                <div class="step-number">5</div>
+                <div class="step-label">Contact</div>
+            </div>
+            <div class="step-tab">
+                <div class="step-number">6</div>
+                <div class="step-label">Documents</div>
+            </div>
+            <div class="step-tab">
+                <div class="step-number">7</div>
+                <div class="step-label">Billing</div>
+            </div>
+            <div class="step-tab">
+                <div class="step-number">8</div>
+                <div class="step-label">Media</div>
+            </div>
+        </aside>
+
+        <!-- Form Content Area -->
+        <section class="multistep-content">
+            <form id="booking-form">
+                
+                <!-- Step 1: Welcome -->
+                <div class="step-pane active">
+                    <div class="step-emoji">👋</div>
+                    <h2 class="step-title">Welcome to the Cloud Social Work Application</h2>
+                    <p class="step-description">Please fill the following fields.</p>
+                    
+                    <div class="field-grid">
+                        <div class="field-wrapper">
+                            <label class="field-label" for="first-name">First Name*</label>
+                            <input type="text" id="first-name" name="first-name" class="step-input" required>
+                        </div>
+                        <div class="field-wrapper">
+                            <label class="field-label" for="last-name">Last Name*</label>
+                            <input type="text" id="last-name" name="last-name" class="step-input" required>
+                        </div>
+                        <div class="field-wrapper">
+                            <label class="field-label" for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="step-input">
+                        </div>
+                        <div class="field-wrapper">
+                            <label class="field-label" for="email">E-Mail Address*</label>
+                            <input type="email" id="email" name="email" class="step-input" required>
+                        </div>
+                    </div>
+                    
+                    <div class="step-buttons">
+                        <button type="button" class="btn-next">Next Step →</button>
+                    </div>
+                </div>
+
+                <!-- Step 2: Healthcare -->
+                <div class="step-pane">
+                    <div class="step-emoji">📚</div>
+                    <h2 class="step-title">Medicare Number</h2>
+                    <p class="step-description">Enter your medicare details (If known)</p>
+                    
+                    <div class="field-grid">
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="medicare-number">Medicare Number</label>
+                            <input type="number" id="medicare-number" name="medicare-number" class="step-input">
+                        </div>
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="medicare-reference">Medicare Individual Reference Number</label>
+                            <input type="number" id="medicare-reference" name="medicare-reference" class="step-input">
+                        </div>
+                    </div>
+                    
+                    <div class="step-buttons">
+                        <button type="button" class="btn-back">← Back</button>
+                        <button type="button" class="btn-next">Next Step →</button>
+                    </div>
+                </div>
+
+                <!-- Step 3: Gender -->
+                <div class="step-pane">
+                    <div class="step-emoji">❓</div>
+                    <h2 class="step-title">Gender</h2>
+                    <p class="step-description">What gender are you?</p>
+                    
+                    <div class="field-grid">
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="gender">Male or Female*</label>
+                            <select id="gender" name="gender" class="step-select" required>
+                                <option value="" disabled selected>Select gender...</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Prefer not to say">Prefer not to say</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="step-buttons">
+                        <button type="button" class="btn-back">← Back</button>
+                        <button type="button" class="btn-next">Next Step →</button>
+                    </div>
+                </div>
+
+                <!-- Step 4: Health -->
+                <div class="step-pane">
+                    <div class="step-emoji">❓</div>
+                    <h2 class="step-title">Health Assessment Form</h2>
+                    <p class="step-description">Tell us about your health as your health information, key to our care for you.</p>
+                    
+                    <div class="field-grid">
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="allergies">Have you been diagnosed with any allergic reactions?*</label>
+                            <select id="allergies" name="allergies" class="step-select" required>
+                                <option value="" disabled selected>Please select...</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="anaphylaxis">Have you been diagnosed as at risk of Anaphylaxis?*</label>
+                            <select id="anaphylaxis" name="anaphylaxis" class="step-select" required>
+                                <option value="" disabled selected>Please select...</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="asthma">Have your been diagnosed with Asthma?*</label>
+                            <select id="asthma" name="asthma" class="step-select" required>
+                                <option value="" disabled selected>Please select...</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="behaviours">Any behaviours that we should be aware of?*</label>
+                            <select id="behaviours" name="behaviours" class="step-select" required>
+                                <option value="" disabled selected>Please select...</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="medication">Will you require medication to be administered whilst attending adventures & programs?*</label>
+                            <select id="medication" name="medication" class="step-select" required>
+                                <option value="" disabled selected>Please select...</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="other-health">Does you have any other specific healthcare needs, including any other medical conditions?*</label>
+                            <select id="other-health" name="other-health" class="step-select" required>
+                                <option value="" disabled selected>Please select...</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="diet">Any dietary restrictions?*</label>
+                            <select id="diet" name="diet" class="step-select" required>
+                                <option value="" disabled selected>Please select...</option>
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="health-details">If answered YES to above Please provide all relevant details...</label>
+                            <textarea id="health-details" name="health-details" class="step-input step-textarea"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="step-buttons">
+                        <button type="button" class="btn-back">← Back</button>
+                        <button type="button" class="btn-next">Next Step →</button>
+                    </div>
+                </div>
+
+                <!-- Step 5: Contact -->
+                <div class="step-pane">
+                    <div class="step-emoji">❓</div>
+                    <h2 class="step-title">Contact Information</h2>
+                    <p class="step-description">Tell us your information below so we can back to you</p>
+                    
+                    <div class="step-checkbox-group">
+                        <label class="step-checkbox-label">
+                            <input type="checkbox" name="contact-role" value="Parent"> Parent
+                        </label>
+                        <label class="step-checkbox-label">
+                            <input type="checkbox" name="contact-role" value="Carer"> Carer
+                        </label>
+                        <label class="step-checkbox-label">
+                            <input type="checkbox" name="contact-role" value="Emergency Contact"> Emergency Contact
+                        </label>
+                        <label class="step-checkbox-label">
+                            <input type="checkbox" name="contact-role" value="Family Member"> Family Member
+                        </label>
+                    </div>
+
+                    <div class="field-grid">
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="contact-address">Current address*</label>
+                            <input type="text" id="contact-address" name="contact-address" class="step-input" required>
+                        </div>
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="contact-name">Full name*</label>
+                            <input type="text" id="contact-name" name="contact-name" class="step-input" required>
+                        </div>
+                        <div class="field-wrapper">
+                            <label class="field-label" for="contact-mobile">Mobile*</label>
+                            <input type="tel" id="contact-mobile" name="contact-mobile" class="step-input" required>
+                        </div>
+                        <div class="field-wrapper">
+                            <label class="field-label" for="contact-email">Email*</label>
+                            <input type="email" id="contact-email" name="contact-email" class="step-input" required>
+                        </div>
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="contact-notes">Is there anything else we should know?</label>
+                            <textarea id="contact-notes" name="contact-notes" class="step-input step-textarea"></textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="step-buttons">
+                        <button type="button" class="btn-back">← Back</button>
+                        <button type="button" class="btn-next">Next Step →</button>
+                    </div>
+                </div>
+
+                <!-- Step 6: Documents -->
+                <div class="step-pane">
+                    <div class="step-emoji">📄</div>
+                    <h2 class="step-title">Any Supporting Documents</h2>
+                    <p class="step-description">Please upload your documents.</p>
+                    
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="file-upload" name="file-upload">
+                        <div class="file-upload-label">Choose File</div>
+                        <div class="file-upload-info">Max file size 10MB</div>
+                        <div class="file-upload-name"></div>
+                    </div>
+                    
+                    <div class="step-buttons">
+                        <button type="button" class="btn-back">← Back</button>
+                        <button type="button" class="btn-next">Next Step →</button>
+                    </div>
+                </div>
+
+                <!-- Step 7: Billing -->
+                <div class="step-pane">
+                    <div class="step-emoji">👂</div>
+                    <h2 class="step-title">Accounts & Billing</h2>
+                    <p class="step-description">Organisation name or self managed persons name</p>
+                    
+                    <div class="field-grid">
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="billing-org">Organisation details</label>
+                            <textarea id="billing-org" name="billing-org" class="step-input step-textarea"></textarea>
+                        </div>
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="billing-email">Invoice Email Address*</label>
+                            <input type="email" id="billing-email" name="billing-email" class="step-input" required>
+                        </div>
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="billing-dates">Plan Dates*</label>
+                            <input type="text" id="billing-dates" name="billing-dates" class="step-input" required>
+                        </div>
+                        <div class="field-wrapper full-width">
+                            <label class="field-label" for="billing-line-item">Line item to invoice (If known)</label>
+                            <input type="text" id="billing-line-item" name="billing-line-item" class="step-input">
+                        </div>
+                    </div>
+                    
+                    <div class="step-buttons">
+                        <button type="button" class="btn-back">← Back</button>
+                        <button type="button" class="btn-next">Next Step →</button>
+                    </div>
+                </div>
+
+                <!-- Step 8: Media/Submit -->
+                <div class="step-pane">
+                    <div class="step-emoji">🙌</div>
+                    <h2 class="step-title">You did it! All that's left is to hit the submit button.</h2>
+                    
+                    <div class="step-buttons">
+                        <button type="button" class="btn-back">← Back</button>
+                        <button type="submit" class="btn-submit">Submit Application</button>
+                    </div>
+                    
+                    <p class="terms-text">I have read, understand, and agree to the terms and conditions outlined in the <a href="documents.html" target="_blank">relevant documents</a>. By clicking the submit button, I acknowledge that I am legally bound to these terms and conditions and agree to abide by them.</p>
+                </div>
+            </form>
+
+            <div class="multistep-success">
+                <h2>Done! Thank you!</h2>
+                <p>Your submission has been received! We will be in touch shortly.</p>
+            </div>
+            
+            <div class="form-error">Oops! Something went wrong while submitting the form. Please try again.</div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <img src="https://cdn.prod.website-files.com/66691c8dd608efff5cd4843d/666ae4055fa1c07f27951fd8_Blue%20White.png" alt="Cloud Social Work Logo">
+                <p class="tagline">Dedication to improving lives through person-centered and community-focused services.</p>
+                <div class="social-links">
+                    <a href="contact-us.html" class="social-link" aria-label="Google">
+                        <svg viewBox="0 0 24 24"><path d="M12.24 10.285V14.4h6.806c-.275 1.765-2.056 5.174-6.806 5.174-4.095 0-7.439-3.389-7.439-7.574s3.345-7.574 7.439-7.574c2.33 0 3.891.989 4.785 1.849l3.254-3.138C18.189 1.186 15.479 0 12.24 0c-6.635 0-12 5.365-12 12s5.365 12 12 12c6.926 0 11.52-4.869 11.52-11.726 0-.788-.085-1.39-.189-1.989H12.24z"/></svg>
+                    </a>
+                    <a href="https://www.facebook.com/outlivinadventures" target="_blank" class="social-link" aria-label="Facebook">
+                        <svg viewBox="0 0 24 24"><path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.325V1.325C24 .593 23.407 0 22.675 0z"/></svg>
+                    </a>
+                    <a href="https://www.instagram.com/outlivinadventures" target="_blank" class="social-link" aria-label="Instagram">
+                        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Get in touch</h3>
+                <a href="mailto:mmcgowan1@outlook.com" class="footer-link">mmcgowan1@outlook.com</a>
+                <a href="tel:0451011473" class="footer-link">0451 011 473</a>
+                <p class="hours-text" style="margin-top: 1rem;">Illawarra | Nowra | Sydney</p>
+            </div>
+            <div class="footer-column">
+                <h3>We are open</h3>
+                <p class="hours-text">Mon-Fri 9-5<br>Sat 9-Noon<br>Sun Closed</p>
+            </div>
+            <div class="footer-column">
+                <h3>Links</h3>
+                <a href="index.html" class="footer-link">Home</a>
+                <a href="contact-us.html" class="footer-link">Contact Us</a>
+                <a href="about-us.html" class="footer-link">About Us</a>
+                <a href="documents.html" class="footer-link">Laws</a>
+                <a href="blog.html" class="footer-link">Blog</a>
+                <div class="footer-newsletter">
+                    <h4>Subscribe</h4>
+                    <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed successfully!');">
+                        <input type="email" placeholder="Email address" class="newsletter-input" required>
+                        <button type="submit" class="newsletter-btn">Join</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="footer-copyright">All visuals and artworks were illustrated and designed by <a href="https://www.linkedin.com/in/chaseforrester/" target="_blank">Chase Forrester</a>. Copyright © <span class="year">2026</span> <a href="https://www.techaidaustralia.com.au/" target="_blank">Tech Aid Australia</a>. All Rights Reserved</p>
+            <p class="footer-acknowledgement">We acknowledge the Traditional Custodians of the land on which we operate, the Dharawal people, and pay our respects to Elders past, present, and emerging.</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/email.js"></script>
+    <script src="js/multistep.js"></script>
+    <!-- Theme Toggle -->
+    <button id="theme-toggle-btn" class="theme-toggle" aria-label="Toggle Dark Mode">
+        <svg class="icon-sun" viewBox="0 0 24 24"><path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.856 6.205a.75.75 0 010 1.06l-1.591 1.591a.75.75 0 11-1.061-1.06l1.591-1.591a.75.75 0 011.06 0zm-9.193 9.193a.75.75 0 010 1.06l-1.591 1.591a.75.75 0 11-1.06-1.061l1.591-1.591a.75.75 0 011.06 0zm7.602 3.197a.75.75 0 011.06 0l1.591 1.591a.75.75 0 11-1.061 1.06l-1.59-1.59a.75.75 0 010-1.061zm-13.784 0a.75.75 0 010-1.06l1.591-1.591a.75.75 0 011.061 1.06l-1.591 1.591a.75.75 0 01-1.06 0zM12 18.75a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V19.5a.75.75 0 01.75-.75zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5h2.25a.75.75 0 01.75.75zM6.75 12a.75.75 0 01-.75.75H3.75a.75.75 0 010-1.5H6a.75.75 0 01.75.75z"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24"><path d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z"/></svg>
+    </button>
+</body>
+</html>
