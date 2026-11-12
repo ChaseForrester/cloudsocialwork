@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div id="chat-messages" class="chat-messages"></div>
                     <form id="chat-input-form" class="chat-input-form">
-                        <input type="text" id="user-query-input" name="user-query" placeholder="Type a message..." autocomplete="off">
-                        <button type="submit" aria-label="Send message">
+                        <input type="text" id="user-query-input" name="user-query" placeholder="Type a message..." autocomplete="off" disabled>
+                        <button type="submit" aria-label="Send message" disabled>
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <line x1="22" y1="2" x2="11" y2="13"></line>
                                 <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
@@ -36,10 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatInputForm = document.getElementById('chat-input-form');
     const chatInput     = document.getElementById('user-query-input');
     const chatMessages  = document.getElementById('chat-messages');
+    const chatSubmitBtn = chatInputForm.querySelector('button[type="submit"]');
 
-    const GEMINI_API_KEY = "AQ.Ab8RN6KdOsRJaO7xvhl66D" + "EWF6O7Pb1B7NQPvOWTh6ofVVoOyw";
-
-    const SYSTEM_PROMPT = "You are the Cloud Social Work AI assistant. You help answer questions about Cloud Social Work's services. We offer Therapeutic Supports for the NDIS (for NDIA Managed, Plan Managed, and Self Managed participants) and comprehensive Social Work services across Wollongong, Sydney, and Nowra. Keep your answers helpful, compassionate, and concise. IMPORTANT INFO to give users if asked: Contact Email is mmcgowan1@outlook.com. Phone number is 0451 011 473. Quick links to our pages: Home (index.html), About Us (about-us.html), Contact Us (faq.html), Events (events.html), Blog (blog.html), Book In (book-in.html), Laws/Documents (documents.html), Therapeutic Supports (therapeutic-supports.html), Social Work Services (social-work.html). SIMPLE FAQ: Q: Do you work with NDIS? A: Yes, we provide supports for NDIA Managed, Plan Managed, and Self Managed NDIS participants. Q: What are your hours? A: We are open Monday-Friday 9am-5pm, and Saturday 9am-Noon. Q: Where are you located? A: We serve the Illawarra, Nowra, and Sydney regions. Q: How do I book an appointment? A: You can book via the 'BOOK IN' link or page. LEAD COLLECTION: If a user wants to leave their contact details or make an inquiry, you DO NOT need to point them to a form. You can act as the form! Ask them for their Name, Phone Number, and what they need help with. Once they provide it, tell them 'Thank you, I have passed your details to our team and we will be in touch shortly!' AND YOU MUST APPEND exactly '||LEAD_CAPTURED||' to the very end of your response.";
+    // Calls are allowed only after /api/chat says the server flag is on.
+    let chatEnabled = false;
 
     // ─── 3. Message history (stored as a plain array) ────────────────────────
     // Each item: { role: 'user'|'assistant', text: '...' }
@@ -59,21 +59,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (raw) {
                 messageHistory = JSON.parse(raw);
                 quickRepliesUsed = sessionStorage.getItem('csw-quick-used') === '1';
-                // Re-render all saved messages
                 messageHistory.forEach(m => renderMessage(m.text, m.role));
             }
         } catch(e) {
             messageHistory = [];
         }
 
-        // If no history, show welcome + quick replies
         if (messageHistory.length === 0) {
             showWelcome();
         }
     }
 
     function showWelcome() {
-        const welcome = "Hello! I'm the Cloud Social Work AI assistant (powered by Gemini). How can I help you learn about our services today?";
+        const welcome = "Hello! I'm the Cloud Social Work assistant. How can I help you learn about our services today?";
         renderMessage(welcome, 'assistant');
 
         const qr = document.createElement('div');
@@ -85,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.className = 'quick-reply-btn';
                 btn.textContent = label;
                 btn.addEventListener('click', () => {
+                    if (!chatEnabled) return;
                     chatInput.value = label;
                     chatInputForm.dispatchEvent(new Event('submit'));
                 });
@@ -108,6 +107,47 @@ document.addEventListener('DOMContentLoaded', () => {
         if (qr) qr.remove();
         if (qp) qp.remove();
         saveHistory();
+    }
+
+    function setComposerEnabled(enabled) {
+        chatInput.disabled = !enabled;
+        if (chatSubmitBtn) chatSubmitBtn.disabled = !enabled;
+        chatInput.placeholder = enabled ? 'Type a message...' : 'Assistant unavailable';
+    }
+
+    function showUnavailable() {
+        chatEnabled = false;
+        setComposerEnabled(false);
+        chatMessages.innerHTML = '';
+
+        const div = document.createElement('div');
+        div.className = 'message assistant chat-unavailable';
+
+        const paragraph = document.createElement('p');
+        paragraph.append('Our AI assistant is temporarily unavailable. Please use the ');
+
+        const formLink = document.createElement('a');
+        formLink.href = 'contact-us.html';
+        formLink.textContent = 'contact form';
+        paragraph.append(formLink);
+
+        paragraph.append(' or call us on ');
+
+        const phoneLink = document.createElement('a');
+        phoneLink.href = 'tel:0451011473';
+        phoneLink.textContent = '0451 011 473';
+        paragraph.append(phoneLink);
+
+        paragraph.append('. You can also email ');
+
+        const emailLink = document.createElement('a');
+        emailLink.href = 'mailto:mmcgowan1@outlook.com';
+        emailLink.textContent = 'mmcgowan1@outlook.com';
+        paragraph.append(emailLink);
+        paragraph.append('.');
+
+        div.append(paragraph);
+        chatMessages.appendChild(div);
     }
 
     // ─── 4. Render a message bubble ──────────────────────────────────────────
@@ -140,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
     chatToggleBtn.addEventListener('click', () => {
         const isHidden = chatWindow.classList.toggle('hidden');
         sessionStorage.setItem('csw-open', isHidden ? '0' : '1');
-        if (!isHidden) chatInput.focus();
+        if (!isHidden && chatEnabled) chatInput.focus();
     });
 
     chatCloseBtn.addEventListener('click', () => {
@@ -148,17 +188,38 @@ document.addEventListener('DOMContentLoaded', () => {
         sessionStorage.setItem('csw-open', '0');
     });
 
-    // ─── 6. Restore open/closed state ───────────────────────────────────────
     if (sessionStorage.getItem('csw-open') === '1') {
         chatWindow.classList.remove('hidden');
     }
 
-    // ─── 7. Load history (or show welcome) ───────────────────────────────────
-    loadHistory();
+    // Off until the server confirms AI_CHAT_ENABLED=true. This path never calls the model.
+    showUnavailable();
 
-    // ─── 8. Submit handler ───────────────────────────────────────────────────
+    fetch('/api/chat', { method: 'GET', cache: 'no-store', headers: { 'Accept': 'application/json' } })
+        .then(res => {
+            if (!res.ok) throw new Error('status');
+            return res.json();
+        })
+        .then(data => {
+            if (!data || data.enabled !== true) return;
+            chatEnabled = true;
+            setComposerEnabled(true);
+            chatMessages.innerHTML = '';
+            loadHistory();
+        })
+        .catch(() => {
+            chatEnabled = false;
+            showUnavailable();
+        });
+
+    // ─── 6. Submit handler ───────────────────────────────────────────────────
     chatInputForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (!chatEnabled) {
+            showUnavailable();
+            return;
+        }
+
         const text = chatInput.value.trim();
         if (!text) return;
 
@@ -166,13 +227,6 @@ document.addEventListener('DOMContentLoaded', () => {
         appendMessage(text, 'user');
         chatInput.value = '';
 
-        // Build the Gemini conversation history (user/model alternation)
-        const contents = messageHistory.map(m => ({
-            role: m.role === 'user' ? 'user' : 'model',
-            parts: [{ text: m.text }]
-        }));
-
-        // Show loading
         const loadingDiv = document.createElement('div');
         loadingDiv.className = 'message assistant loading';
         loadingDiv.textContent = 'Thinking…';
@@ -180,27 +234,28 @@ document.addEventListener('DOMContentLoaded', () => {
         chatMessages.scrollTop = chatMessages.scrollHeight;
 
         try {
-            const res = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${GEMINI_API_KEY}`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-                        contents,
-                        generationConfig: { temperature: 0.7 }
-                    })
-                }
-            );
+            const res = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({
+                    messages: messageHistory.slice(-6).map(m => ({ role: m.role, text: m.text }))
+                })
+            });
 
+            const data = await res.json().catch(() => ({}));
+            if (res.status === 503 || data.enabled === false) {
+                chatMessages.removeChild(loadingDiv);
+                showUnavailable();
+                return;
+            }
             if (!res.ok) throw new Error(`API ${res.status}`);
-            const data = await res.json();
-            let reply = data.candidates[0].content.parts[0].text;
 
-            // Lead capture signal
+            let reply = data.reply;
+            if (typeof reply !== 'string' || !reply.trim()) throw new Error('empty');
+
             if (reply.includes('||LEAD_CAPTURED||')) {
                 reply = reply.replace('||LEAD_CAPTURED||', '').trim();
-                const transcript = messageHistory.map(m => `${m.role.toUpperCase()}: ${m.text}`).join('\n\n') + `\n\nUSER: ${text}\nMODEL: ${reply}`;
+                const transcript = messageHistory.map(m => `${m.role.toUpperCase()}: ${m.text}`).join('\n\n') + `\n\nMODEL: ${reply}`;
                 if (typeof sendChatTranscript === 'function') {
                     sendChatTranscript(transcript).catch(err => console.error('Email failed:', err));
                 }
@@ -208,14 +263,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             chatMessages.removeChild(loadingDiv);
             appendMessage(reply, 'assistant');
-
         } catch (err) {
             console.error('Chat error:', err);
             if (chatMessages.contains(loadingDiv)) chatMessages.removeChild(loadingDiv);
-            let msg = 'Sorry, I encountered an error. Please try again.';
-            if (err.message.includes('400')) msg = 'API Error: Bad request. Please check the API key.';
-            else if (err.name === 'TypeError') msg = 'Network error. Please check your connection.';
-            appendMessage(msg, 'assistant');
+            appendMessage('Sorry, I encountered an error. Please try again.', 'assistant');
         }
     });
 });
