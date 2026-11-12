@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // ─── 1. Inject the widget HTML ───────────────────────────────────────────
     if (!document.getElementById('chat-widget')) {
         document.body.insertAdjacentHTML('beforeend', `
             <div id="chat-widget" class="chat-widget">
@@ -29,7 +28,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `);
     }
 
-    // ─── 2. Grab DOM references ──────────────────────────────────────────────
     const chatToggleBtn = document.getElementById('chat-toggle-btn');
     const chatWindow    = document.getElementById('chat-window');
     const chatCloseBtn  = document.getElementById('chat-close-btn');
@@ -37,80 +35,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatInput     = document.getElementById('user-query-input');
     const chatMessages  = document.getElementById('chat-messages');
 
-    const GEMINI_API_KEY = "AQ.Ab8RN6KdOsRJaO7xvhl66D" + "EWF6O7Pb1B7NQPvOWTh6ofVVoOyw";
-
-    const SYSTEM_PROMPT = "You are the Cloud Social Work AI assistant. You help answer questions about Cloud Social Work's services. We offer Therapeutic Supports for the NDIS (for NDIA Managed, Plan Managed, and Self Managed participants) and comprehensive Social Work services across Wollongong, Sydney, and Nowra. Keep your answers helpful, compassionate, and concise. IMPORTANT INFO to give users if asked: Contact Email is mmcgowan1@outlook.com. Phone number is 0451 011 473. Quick links to our pages: Home (index.html), About Us (about-us.html), Contact Us (faq.html), Events (events.html), Blog (blog.html), Book In (book-in.html), Laws/Documents (documents.html), Therapeutic Supports (therapeutic-supports.html), Social Work Services (social-work.html). SIMPLE FAQ: Q: Do you work with NDIS? A: Yes, we provide supports for NDIA Managed, Plan Managed, and Self Managed NDIS participants. Q: What are your hours? A: We are open Monday-Friday 9am-5pm, and Saturday 9am-Noon. Q: Where are you located? A: We serve the Illawarra, Nowra, and Sydney regions. Q: How do I book an appointment? A: You can book via the 'BOOK IN' link or page. LEAD COLLECTION: If a user wants to leave their contact details or make an inquiry, you DO NOT need to point them to a form. You can act as the form! Ask them for their Name, Phone Number, and what they need help with. Once they provide it, tell them 'Thank you, I have passed your details to our team and we will be in touch shortly!' AND YOU MUST APPEND exactly '||LEAD_CAPTURED||' to the very end of your response.";
-
-    // ─── 3. Message history (stored as a plain array) ────────────────────────
-    // Each item: { role: 'user'|'assistant', text: '...' }
+    const presets = Array.isArray(window.CSW_PRESETS) ? window.CSW_PRESETS : [];
+    let chatEnabled = false;
+    let aiStatusKnown = false;
     let messageHistory = [];
-    let quickRepliesUsed = false;
 
-    function saveHistory() {
-        try {
-            sessionStorage.setItem('csw-history', JSON.stringify(messageHistory));
-            sessionStorage.setItem('csw-quick-used', quickRepliesUsed ? '1' : '0');
-        } catch(e) {}
+    function normalise(text) {
+        return String(text || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
     }
 
-    function loadHistory() {
-        try {
-            const raw = sessionStorage.getItem('csw-history');
-            if (raw) {
-                messageHistory = JSON.parse(raw);
-                quickRepliesUsed = sessionStorage.getItem('csw-quick-used') === '1';
-                // Re-render all saved messages
-                messageHistory.forEach(m => renderMessage(m.text, m.role));
-            }
-        } catch(e) {
-            messageHistory = [];
-        }
-
-        // If no history, show welcome + quick replies
-        if (messageHistory.length === 0) {
-            showWelcome();
-        }
+    function findPreset(text) {
+        const key = normalise(text);
+        return presets.find(item => normalise(item.question) === key) || null;
     }
 
-    function showWelcome() {
-        const welcome = "Hello! I'm the Cloud Social Work AI assistant (powered by Gemini). How can I help you learn about our services today?";
-        renderMessage(welcome, 'assistant');
-
-        const qr = document.createElement('div');
-        qr.className = 'chat-quick-replies';
-        qr.id = 'chat-quick-replies';
-        ['Do you work with NDIS?', 'What are your hours?', 'Where are you located?', 'How do I book an appointment?', 'What services do you offer?']
-            .forEach(label => {
-                const btn = document.createElement('button');
-                btn.className = 'quick-reply-btn';
-                btn.textContent = label;
-                btn.addEventListener('click', () => {
-                    chatInput.value = label;
-                    chatInputForm.dispatchEvent(new Event('submit'));
-                });
-                qr.appendChild(btn);
-            });
-        chatMessages.appendChild(qr);
-
-        const hint = document.createElement('div');
-        hint.className = 'message assistant';
-        hint.id = 'chat-quick-reply-prompt';
-        hint.style.cssText = 'font-size:12px;padding:0 5px;background:transparent;border:none;margin-top:-5px;box-shadow:none;';
-        hint.textContent = 'Feel free to click a question above or ask me anything you like!';
-        chatMessages.appendChild(hint);
-    }
-
-    function hideQuickReplies() {
-        if (quickRepliesUsed) return;
-        quickRepliesUsed = true;
-        const qr = document.getElementById('chat-quick-replies');
-        const qp = document.getElementById('chat-quick-reply-prompt');
-        if (qr) qr.remove();
-        if (qp) qp.remove();
-        saveHistory();
-    }
-
-    // ─── 4. Render a message bubble ──────────────────────────────────────────
     function parseMarkdown(text) {
         let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
         html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
@@ -132,11 +70,206 @@ document.addEventListener('DOMContentLoaded', () => {
     function appendMessage(text, role) {
         const div = renderMessage(text, role);
         messageHistory.push({ role, text });
-        saveHistory();
+        try {
+            sessionStorage.setItem('csw-history', JSON.stringify(messageHistory.slice(-12)));
+        } catch (err) {}
         return div;
     }
 
-    // ─── 5. Toggle / close ───────────────────────────────────────────────────
+    function showPresets() {
+        const existing = document.getElementById('chat-quick-replies');
+        if (existing) existing.remove();
+        if (!presets.length) return;
+
+        const wrap = document.createElement('div');
+        wrap.className = 'chat-quick-replies';
+        wrap.id = 'chat-quick-replies';
+        presets.forEach(item => {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'quick-reply-btn';
+            btn.textContent = item.question;
+            btn.addEventListener('click', () => answerPreset(item));
+            wrap.appendChild(btn);
+        });
+        chatMessages.appendChild(wrap);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function showWelcome() {
+        renderMessage("Hello. Choose a question below, or type your own.", 'assistant');
+        showPresets();
+    }
+
+    function answerPreset(item) {
+        appendMessage(item.question, 'user');
+        appendMessage(item.answer, 'assistant');
+        showPresets();
+    }
+
+    function showHandoff(question) {
+        const previous = document.getElementById('chat-handoff');
+        if (previous) previous.remove();
+
+        const box = document.createElement('div');
+        box.className = 'message assistant chat-handoff';
+        box.id = 'chat-handoff';
+
+        const intro = document.createElement('p');
+        intro.textContent = "I don't have a prepared answer for that. Leave your email and phone and I'll send your question to the team. Your name is optional.";
+        box.appendChild(intro);
+
+        const nameLabel = document.createElement('label');
+        nameLabel.textContent = 'Name (optional)';
+        const nameInput = document.createElement('input');
+        nameInput.type = 'text';
+        nameInput.name = 'name';
+        nameInput.autocomplete = 'name';
+        nameInput.maxLength = 100;
+        nameLabel.appendChild(nameInput);
+
+        const emailLabel = document.createElement('label');
+        emailLabel.textContent = 'Email';
+        const emailInput = document.createElement('input');
+        emailInput.type = 'email';
+        emailInput.name = 'email';
+        emailInput.autocomplete = 'email';
+        emailInput.required = true;
+        emailInput.maxLength = 200;
+        emailLabel.appendChild(emailInput);
+
+        const phoneLabel = document.createElement('label');
+        phoneLabel.textContent = 'Phone';
+        const phoneInput = document.createElement('input');
+        phoneInput.type = 'tel';
+        phoneInput.name = 'phone';
+        phoneInput.autocomplete = 'tel';
+        phoneInput.required = true;
+        phoneInput.maxLength = 40;
+        phoneLabel.appendChild(phoneInput);
+
+        const honeypotLabel = document.createElement('label');
+        honeypotLabel.className = 'chat-honeypot';
+        honeypotLabel.textContent = 'Company';
+        const honeypot = document.createElement('input');
+        honeypot.type = 'text';
+        honeypot.name = 'company';
+        honeypot.tabIndex = -1;
+        honeypot.autocomplete = 'off';
+        honeypotLabel.appendChild(honeypot);
+
+        const sendBtn = document.createElement('button');
+        sendBtn.type = 'button';
+        sendBtn.className = 'chat-handoff-send';
+        sendBtn.textContent = 'Send to the team';
+
+        const note = document.createElement('p');
+        note.className = 'chat-handoff-note';
+
+        sendBtn.addEventListener('click', async () => {
+            note.textContent = '';
+            const email = emailInput.value.trim();
+            const phone = phoneInput.value.trim();
+            const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            const phoneDigits = phone.replace(/\D/g, '');
+            if (!emailOk || phoneDigits.length < 8 || phoneDigits.length > 15) {
+                note.textContent = 'Please enter a valid email address and phone number.';
+                return;
+            }
+
+            sendBtn.disabled = true;
+            try {
+                const res = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({
+                        name: nameInput.value.trim(),
+                        email,
+                        phone,
+                        message: question,
+                        company: honeypot.value
+                    })
+                });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok || !data.ok) {
+                    throw new Error('send');
+                }
+                const done = document.createElement('div');
+                done.className = 'message assistant';
+                done.textContent = "Thanks, your question has been sent to the team. We'll be in touch soon.";
+                box.replaceWith(done);
+            } catch (err) {
+                note.textContent = '';
+                const fail = document.createElement('span');
+                fail.append("Sorry, we couldn't send that just now. Please call us on ");
+                const phoneLink = document.createElement('a');
+                phoneLink.href = 'tel:0451011473';
+                phoneLink.textContent = '0451 011 473';
+                fail.append(phoneLink);
+                fail.append('.');
+                note.appendChild(fail);
+                sendBtn.disabled = false;
+            }
+        });
+
+        box.append(nameLabel, emailLabel, phoneLabel, honeypotLabel, sendBtn, note);
+        chatMessages.appendChild(box);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        emailInput.focus();
+    }
+
+    async function sendToAi(text) {
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'message assistant loading';
+        loadingDiv.textContent = 'Thinking…';
+        chatMessages.appendChild(loadingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        try {
+            const res = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({
+                    messages: messageHistory.slice(-6).map(m => ({ role: m.role, text: m.text }))
+                })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (chatMessages.contains(loadingDiv)) chatMessages.removeChild(loadingDiv);
+            if (res.status === 503 || data.enabled === false) {
+                chatEnabled = false;
+                showHandoff(text);
+                return;
+            }
+            if (!res.ok || typeof data.reply !== 'string' || !data.reply.trim()) {
+                throw new Error('api');
+            }
+            let reply = data.reply;
+            if (reply.includes('||LEAD_CAPTURED||')) {
+                reply = reply.replace('||LEAD_CAPTURED||', '').trim();
+                const transcript = messageHistory.map(m => `${m.role.toUpperCase()}: ${m.text}`).join('\n\n');
+                if (typeof sendChatTranscript === 'function') {
+                    sendChatTranscript(transcript).catch(err => console.error('Email failed:', err));
+                }
+            }
+            appendMessage(reply, 'assistant');
+        } catch (err) {
+            if (chatMessages.contains(loadingDiv)) chatMessages.removeChild(loadingDiv);
+            appendMessage('Sorry, I encountered an error. Please try again.', 'assistant');
+        }
+    }
+
+    const aiStatusPromise = fetch('/api/chat', { method: 'GET', cache: 'no-store', headers: { 'Accept': 'application/json' } })
+        .then(res => res.ok ? res.json() : null)
+        .then(data => {
+            chatEnabled = !!(data && data.enabled === true);
+        })
+        .catch(() => {
+            chatEnabled = false;
+        })
+        .finally(() => {
+            aiStatusKnown = true;
+        });
+
     chatToggleBtn.addEventListener('click', () => {
         const isHidden = chatWindow.classList.toggle('hidden');
         sessionStorage.setItem('csw-open', isHidden ? '0' : '1');
@@ -148,74 +281,31 @@ document.addEventListener('DOMContentLoaded', () => {
         sessionStorage.setItem('csw-open', '0');
     });
 
-    // ─── 6. Restore open/closed state ───────────────────────────────────────
     if (sessionStorage.getItem('csw-open') === '1') {
         chatWindow.classList.remove('hidden');
     }
 
-    // ─── 7. Load history (or show welcome) ───────────────────────────────────
-    loadHistory();
+    showWelcome();
 
-    // ─── 8. Submit handler ───────────────────────────────────────────────────
     chatInputForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const text = chatInput.value.trim();
         if (!text) return;
-
-        hideQuickReplies();
-        appendMessage(text, 'user');
         chatInput.value = '';
 
-        // Build the Gemini conversation history (user/model alternation)
-        const contents = messageHistory.map(m => ({
-            role: m.role === 'user' ? 'user' : 'model',
-            parts: [{ text: m.text }]
-        }));
-
-        // Show loading
-        const loadingDiv = document.createElement('div');
-        loadingDiv.className = 'message assistant loading';
-        loadingDiv.textContent = 'Thinking…';
-        chatMessages.appendChild(loadingDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-
-        try {
-            const res = await fetch(
-                `https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=${GEMINI_API_KEY}`,
-                {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
-                        contents,
-                        generationConfig: { temperature: 0.7 }
-                    })
-                }
-            );
-
-            if (!res.ok) throw new Error(`API ${res.status}`);
-            const data = await res.json();
-            let reply = data.candidates[0].content.parts[0].text;
-
-            // Lead capture signal
-            if (reply.includes('||LEAD_CAPTURED||')) {
-                reply = reply.replace('||LEAD_CAPTURED||', '').trim();
-                const transcript = messageHistory.map(m => `${m.role.toUpperCase()}: ${m.text}`).join('\n\n') + `\n\nUSER: ${text}\nMODEL: ${reply}`;
-                if (typeof sendChatTranscript === 'function') {
-                    sendChatTranscript(transcript).catch(err => console.error('Email failed:', err));
-                }
-            }
-
-            chatMessages.removeChild(loadingDiv);
-            appendMessage(reply, 'assistant');
-
-        } catch (err) {
-            console.error('Chat error:', err);
-            if (chatMessages.contains(loadingDiv)) chatMessages.removeChild(loadingDiv);
-            let msg = 'Sorry, I encountered an error. Please try again.';
-            if (err.message.includes('400')) msg = 'API Error: Bad request. Please check the API key.';
-            else if (err.name === 'TypeError') msg = 'Network error. Please check your connection.';
-            appendMessage(msg, 'assistant');
+        const preset = findPreset(text);
+        appendMessage(text, 'user');
+        if (preset) {
+            appendMessage(preset.answer, 'assistant');
+            showPresets();
+            return;
         }
+
+        if (!aiStatusKnown) await aiStatusPromise;
+        if (chatEnabled) {
+            await sendToAi(text);
+            return;
+        }
+        showHandoff(text);
     });
 });

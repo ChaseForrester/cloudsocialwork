@@ -109,6 +109,89 @@
     border-bottom-left-radius: 4px;
 }
 
+.chat-unavailable {
+    max-width: 100%;
+}
+
+.chat-unavailable p {
+    margin: 0;
+}
+
+.chat-unavailable a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.chat-input-form input:disabled,
+.chat-input-form button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.chat-handoff {
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+}
+
+.chat-handoff p {
+    margin: 0;
+}
+
+.chat-handoff label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+}
+
+.chat-handoff input {
+    width: 100%;
+    border: 1px solid var(--border-color, #ccc);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font: inherit;
+    font-size: 14px;
+    background: var(--bg-color, #fff);
+    color: var(--text-color, #333);
+}
+
+.chat-handoff-send {
+    border: none;
+    border-radius: 16px;
+    padding: 8px 12px;
+    background: var(--primary-color, #0a0a2e);
+    color: #fff;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.chat-handoff-send:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.chat-handoff-note {
+    font-size: 13px;
+}
+
+.chat-handoff-note a,
+.chat-unavailable a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.chat-honeypot {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
 .message.user {
     background-color: var(--primary-color, #2b5c7f);
     color: white;
