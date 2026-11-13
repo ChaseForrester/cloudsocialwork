@@ -26,9 +26,9 @@
   --form-border: #e0e0d8;
   --form-text: #000000;
   
-  --btn-bg: #000000;
-  --btn-text: #ffffff;
-  --btn-hover: #222222;
+  --btn-bg: #0a0a2e;
+  --btn-text: #f5f5f0;
+  --btn-hover: #1a1a4e;
 
   --footer-bg: #0a0a2e;
   --footer-text: #ffffff;
@@ -57,9 +57,9 @@
   --form-border: #333366;
   --form-text: #ffffff;
   
-  --btn-bg: #ffffff;
+  --btn-bg: #f5f5f0;
   --btn-text: #0a0a2e;
-  --btn-hover: #e0e0e0;
+  --btn-hover: #e0e0d8;
   
   --footer-bg: #05051a;
   --footer-text: #ffffff;
@@ -105,6 +105,10 @@ a {
   text-decoration: none;
   color: inherit;
   transition: opacity 0.3s ease;
+}
+
+a:visited {
+  color: inherit;
 }
 
 a:hover {
@@ -162,14 +166,14 @@ p {
 }
 
 .animate-on-scroll {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+  /* Visible by default so content is not hidden if JavaScript fails. */
+  opacity: 1;
+  transform: none;
 }
 
 .animate-on-scroll.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: none;
 }
 
 .hover-scale {
@@ -809,8 +813,19 @@ p {
   border-radius: 4px;
 }
 
-.btn-cta:hover {
+.btn-cta:link,
+.btn-cta:visited {
+  color: var(--btn-text);
+  background: var(--btn-bg);
+}
+
+.btn-cta:hover,
+.btn-cta:focus,
+.btn-cta:focus-visible,
+.btn-cta:active {
   background: var(--btn-hover);
+  color: var(--btn-text);
+  opacity: 1;
   transform: translateY(-2px);
 }
 
@@ -1140,8 +1155,13 @@ p {
   margin-top: 1rem;
 }
 
-.form-submit:hover {
+.form-submit:hover,
+.form-submit:focus,
+.form-submit:focus-visible,
+.form-submit:active {
   background: var(--btn-hover);
+  color: var(--btn-text);
+  opacity: 1;
   transform: translateY(-2px);
 }
 
@@ -2281,8 +2301,13 @@ html[data-theme="light"] .footer-brand img {
   transition: background 0.3s ease;
 }
 
-.newsletter-btn:hover {
-  background: rgba(255, 255, 255, 0.8);
+.newsletter-btn:hover,
+.newsletter-btn:focus,
+.newsletter-btn:focus-visible,
+.newsletter-btn:active {
+  background: #f5f5f0;
+  color: #0a0a2e;
+  opacity: 1;
 }
 
 /* ===================================
@@ -2598,8 +2623,14 @@ html[data-contrast="high"] * {
   border-radius: 4px;
   margin-left: 1rem;
 }
-.navbar-top .nav-menu .btn-cta:hover {
+.navbar-top .nav-menu .btn-cta:hover,
+.navbar-top .nav-menu .btn-cta:focus,
+.navbar-top .nav-menu .btn-cta:focus-visible,
+.navbar-top .nav-menu .btn-cta:active,
+.navbar-top .nav-menu .btn-cta:visited {
   background: var(--btn-hover) !important;
+  color: var(--btn-text) !important;
+  opacity: 1;
 }
 .navbar-top .nav-menu .btn-cta::after {
   display: none; /* remove hover line */
@@ -2745,9 +2776,19 @@ html[data-contrast="high"] * {
   border-radius: 2px;
   transition: all 0.25s ease;
 }
-.btn-cta-secondary:hover {
+.btn-cta-secondary:link,
+.btn-cta-secondary:visited {
+  color: var(--text-color);
+  background: transparent;
+}
+
+.btn-cta-secondary:hover,
+.btn-cta-secondary:focus,
+.btn-cta-secondary:focus-visible,
+.btn-cta-secondary:active {
   background: var(--text-color);
   color: var(--bg-color);
+  opacity: 1;
 }
 .about-long-section,
 .about-split-section {
@@ -2779,8 +2820,8 @@ html[data-contrast="high"] * {
   color: var(--text-color);
   margin: 0 0 1.15rem;
 }
-.about-prose a,
-.about-faq a {
+.about-prose a:not([class*="btn"]):not(.form-submit):not(.circle-link),
+.about-faq a:not([class*="btn"]):not(.form-submit):not(.circle-link) {
   color: var(--text-color);
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -2895,5 +2936,289 @@ html[data-contrast="high"] * {
   .about-long-section,
   .about-split-section {
     padding: 3.5rem 1.5rem;
+  }
+}
+
+/* ==========================================================================
+   Button & CTA contrast — source of truth
+   Filled buttons: cream text on navy/black fill in every state.
+   Outline buttons: dark (or theme) text on a light/transparent background.
+   Beats global `a`, `a:visited`, `a:hover { opacity }`, and prose link styles.
+   Contrast is well above WCAG AA 4.5:1 (cream #f5f5f0 on navy #0a0a2e).
+   ========================================================================== */
+a.btn-cta,
+a.btn-cta:link,
+a.btn-cta:visited,
+a.btn-cta:hover,
+a.btn-cta:focus,
+a.btn-cta:focus-visible,
+a.btn-cta:active,
+button.btn-cta,
+button.btn-cta:hover,
+button.btn-cta:focus,
+button.btn-cta:focus-visible,
+button.btn-cta:active,
+.form-submit,
+.form-submit:hover,
+.form-submit:focus,
+.form-submit:focus-visible,
+.form-submit:active,
+.btn-next,
+.btn-next:hover,
+.btn-next:focus,
+.btn-next:focus-visible,
+.btn-next:active,
+.btn-submit,
+.btn-submit:hover,
+.btn-submit:focus,
+.btn-submit:focus-visible,
+.btn-submit:active,
+.navbar-top .nav-menu a.btn-cta,
+.navbar-top .nav-menu a.btn-cta:link,
+.navbar-top .nav-menu a.btn-cta:visited,
+.navbar-top .nav-menu a.btn-cta:hover,
+.navbar-top .nav-menu a.btn-cta:focus,
+.navbar-top .nav-menu a.btn-cta:focus-visible,
+.navbar-top .nav-menu a.btn-cta:active,
+.navbar-side .side-nav-menu a.btn-cta,
+.navbar-side .side-nav-menu a.btn-cta:link,
+.navbar-side .side-nav-menu a.btn-cta:visited,
+.navbar-side .side-nav-menu a.btn-cta:hover,
+.navbar-side .side-nav-menu a.btn-cta:focus,
+.navbar-side .side-nav-menu a.btn-cta:focus-visible,
+.navbar-side .side-nav-menu a.btn-cta:active,
+.about-prose a.btn-cta,
+.about-prose a.btn-cta:link,
+.about-prose a.btn-cta:visited,
+.about-prose a.btn-cta:hover,
+.about-prose a.btn-cta:focus,
+.about-prose a.btn-cta:focus-visible,
+.about-prose a.btn-cta:active,
+.about-faq a.btn-cta,
+.about-faq a.btn-cta:link,
+.about-faq a.btn-cta:visited,
+.about-faq a.btn-cta:hover,
+.about-faq a.btn-cta:focus,
+.about-faq a.btn-cta:focus-visible,
+.about-faq a.btn-cta:active {
+  color: var(--btn-text) !important;
+  -webkit-text-fill-color: var(--btn-text);
+  background: var(--btn-bg) !important;
+  background-color: var(--btn-bg) !important;
+  text-decoration: none !important;
+  opacity: 1;
+}
+
+a.btn-cta:hover,
+a.btn-cta:focus,
+a.btn-cta:focus-visible,
+a.btn-cta:active,
+button.btn-cta:hover,
+button.btn-cta:focus,
+button.btn-cta:focus-visible,
+button.btn-cta:active,
+.form-submit:hover,
+.form-submit:focus,
+.form-submit:focus-visible,
+.form-submit:active,
+.btn-next:hover,
+.btn-next:focus,
+.btn-next:focus-visible,
+.btn-next:active,
+.btn-submit:hover,
+.btn-submit:focus,
+.btn-submit:focus-visible,
+.btn-submit:active,
+.navbar-top .nav-menu a.btn-cta:hover,
+.navbar-top .nav-menu a.btn-cta:focus,
+.navbar-top .nav-menu a.btn-cta:focus-visible,
+.navbar-top .nav-menu a.btn-cta:active,
+.navbar-side .side-nav-menu a.btn-cta:hover,
+.navbar-side .side-nav-menu a.btn-cta:focus,
+.navbar-side .side-nav-menu a.btn-cta:focus-visible,
+.navbar-side .side-nav-menu a.btn-cta:active,
+.about-prose a.btn-cta:hover,
+.about-prose a.btn-cta:focus,
+.about-prose a.btn-cta:focus-visible,
+.about-prose a.btn-cta:active,
+.about-faq a.btn-cta:hover,
+.about-faq a.btn-cta:focus,
+.about-faq a.btn-cta:focus-visible,
+.about-faq a.btn-cta:active {
+  color: var(--btn-text) !important;
+  -webkit-text-fill-color: var(--btn-text);
+  background: var(--btn-hover) !important;
+  background-color: var(--btn-hover) !important;
+  opacity: 1;
+}
+
+a.btn-cta-secondary,
+a.btn-cta-secondary:link,
+a.btn-cta-secondary:visited,
+a.btn-cta-secondary:focus,
+.btn-back,
+.btn-back:link,
+.btn-back:visited,
+.btn-back:focus,
+.about-prose a.btn-cta-secondary,
+.about-prose a.btn-cta-secondary:link,
+.about-prose a.btn-cta-secondary:visited,
+.about-prose a.btn-cta-secondary:focus,
+.about-faq a.btn-cta-secondary,
+.about-faq a.btn-cta-secondary:link,
+.about-faq a.btn-cta-secondary:visited,
+.about-faq a.btn-cta-secondary:focus {
+  color: var(--text-color) !important;
+  -webkit-text-fill-color: var(--text-color);
+  background: transparent !important;
+  background-color: transparent !important;
+  text-decoration: none !important;
+  opacity: 1;
+}
+
+a.btn-cta-secondary:hover,
+a.btn-cta-secondary:focus-visible,
+a.btn-cta-secondary:active,
+.btn-back:hover,
+.btn-back:focus-visible,
+.btn-back:active,
+.about-prose a.btn-cta-secondary:hover,
+.about-prose a.btn-cta-secondary:focus-visible,
+.about-prose a.btn-cta-secondary:active,
+.about-faq a.btn-cta-secondary:hover,
+.about-faq a.btn-cta-secondary:focus-visible,
+.about-faq a.btn-cta-secondary:active {
+  background: var(--text-color) !important;
+  background-color: var(--text-color) !important;
+  color: var(--bg-color) !important;
+  -webkit-text-fill-color: var(--bg-color);
+  text-decoration: none !important;
+  opacity: 1;
+}
+
+.newsletter-btn,
+.newsletter-btn:link,
+.newsletter-btn:visited,
+.newsletter-btn:hover,
+.newsletter-btn:focus,
+.newsletter-btn:focus-visible,
+.newsletter-btn:active {
+  background: #f5f5f0;
+  color: #0a0a2e;
+  -webkit-text-fill-color: #0a0a2e;
+  opacity: 1;
+}
+
+a.btn-cta:focus-visible,
+a.btn-cta-secondary:focus-visible,
+.form-submit:focus-visible,
+.btn-next:focus-visible,
+.btn-submit:focus-visible,
+.btn-back:focus-visible,
+.newsletter-btn:focus-visible,
+.btn-text-icon:focus-visible {
+  outline: 2px solid var(--text-color);
+  outline-offset: 3px;
+}
+
+/* ==========================================================================
+   Motion: CSS-first, JS-enhanced, reduced-motion safe
+   Hero headings and images stay visible on first paint so LCP is not delayed.
+   ========================================================================== */
+@keyframes hero-enter {
+  from { transform: translateY(16px); }
+  to { transform: translateY(0); }
+}
+
+@keyframes image-reveal {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-content-right,
+  .hero-content,
+  .documents-header,
+  .events-header {
+    animation: hero-enter 0.85s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+
+  html.js .animate-on-scroll:not(.hero-content-right):not(.hero-content):not(.documents-header):not(.events-header) {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1),
+                transform 0.7s cubic-bezier(0.25, 1, 0.5, 1);
+    transition-delay: var(--stagger, 0ms);
+  }
+
+  html.js .animate-on-scroll.visible,
+  html.js .animate-on-scroll.hero-content-right,
+  html.js .animate-on-scroll.hero-content {
+    opacity: 1;
+    transform: none;
+  }
+
+  html.js .animate-on-scroll.visible .about-figure img,
+  html.js .animate-on-scroll.visible .about-wide-figure img,
+  html.js .animate-on-scroll.visible .commitment-images img,
+  html.js .animate-on-scroll.visible .content-image,
+  html.js .animate-on-scroll.visible .content-grid img,
+  html.js .animate-on-scroll.visible .puzzle-grid img {
+    animation: image-reveal 0.8s cubic-bezier(0.25, 1, 0.5, 1) both;
+  }
+
+  html.js .animate-on-scroll.visible .about-figure img { animation-delay: 0.12s; }
+  html.js .about-value-card:nth-child(2) { transition-delay: 0.1s; }
+  html.js .about-value-card:nth-child(3) { transition-delay: 0.2s; }
+
+  .btn-cta,
+  .btn-cta-secondary,
+  .form-submit,
+  .btn-next,
+  .btn-submit,
+  .btn-back,
+  .newsletter-btn {
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease, color 0.25s ease, opacity 0.25s ease;
+  }
+
+  a.btn-cta:hover,
+  a.btn-cta-secondary:hover,
+  .form-submit:hover,
+  .btn-next:hover,
+  .btn-submit:hover,
+  .btn-back:hover,
+  .newsletter-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 18px rgba(10, 10, 46, 0.16);
+  }
+
+  .about-value-card,
+  .blog-card,
+  .document-card,
+  .process-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .about-value-card:hover,
+  .document-card:hover,
+  .process-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-hover-shadow);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-on-scroll,
+  html.js .animate-on-scroll,
+  .hero-content-right,
+  .hero-content,
+  .documents-header,
+  .events-header,
+  .about-figure img,
+  .about-wide-figure img {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
   }
 }

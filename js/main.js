@@ -84,22 +84,42 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // ===================================
-  // Scroll Animations
+  // Scroll Animations (IntersectionObserver)
+  // Content stays visible if this script never runs. Hero blocks are
+  // not hidden before first paint — they rely on a CSS entrance only.
   // ===================================
   const animateElements = document.querySelectorAll('.animate-on-scroll');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const heroSkip = { 'hero-content-right': true, 'hero-content': true, 'documents-header': true, 'events-header': true };
 
-  function checkScroll() {
-    animateElements.forEach(function(el) {
-      const rect = el.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      if (rect.top < windowHeight * 0.85) {
-        el.classList.add('visible');
-      }
-    });
+  function revealAll(nodes) {
+    nodes.forEach(function(el) { el.classList.add('visible'); });
   }
 
-  window.addEventListener('scroll', checkScroll);
-  checkScroll(); // Check on load
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    revealAll(animateElements);
+  } else {
+    const observer = new IntersectionObserver(function(entries, obs) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('visible');
+        obs.unobserve(entry.target);
+      });
+    }, { root: null, rootMargin: '0px 0px -8% 0px', threshold: 0.12 });
+
+    animateElements.forEach(function(el, index) {
+      var skip = false;
+      el.className.split(/\s+/).forEach(function(cls) {
+        if (heroSkip[cls]) skip = true;
+      });
+      if (skip) {
+        el.classList.add('visible');
+        return;
+      }
+      el.style.setProperty('--stagger', ((index % 6) * 70) + 'ms');
+      observer.observe(el);
+    });
+  }
 
   // ===================================
   // Smooth Scroll for Anchor Links
