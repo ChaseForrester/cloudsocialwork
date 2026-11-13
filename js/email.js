@@ -18,7 +18,7 @@
 const EMAIL_CONFIG = {
   // The email address where all forms will be sent.
   RECIPIENT_EMAIL: 'stormychaseforrester@gmail.com',
-  CC_EMAIL: 'hello@techaidaustralia.com.au'
+  CC_EMAIL: 'michael.mcgowan8@hotmail.com,hello@techaidaustralia.com.au'
 };
 
 /**
