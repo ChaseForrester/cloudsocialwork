@@ -12,7 +12,7 @@ SKIP_NAMES = {".git", "public", "scripts", "images", "api", "__pycache__"}
 SKIP_SUFFIXES = {".py", ".b64", ".example"}
 
 def decode_images(dest_images: Path) -> int:
-    files = sorted(SRC.glob("*.webp.b64"))
+    files = sorted(set(SRC.glob("*.webp.b64")) | set(SRC.glob("*.jpg.b64")) | set(SRC.glob("*.jpeg.b64")))
     if not files:
         print("No image source files found", file=sys.stderr)
         return 0

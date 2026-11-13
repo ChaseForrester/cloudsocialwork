@@ -2722,6 +2722,14 @@ html[data-contrast="high"] * {
 .about-hero .hero-bg-half {
   background-image: none;
   overflow: hidden;
+  position: relative;
+}
+.about-hero .hero-bg-half picture {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 .about-hero .hero-bg-half img {
   position: absolute;
@@ -2729,9 +2737,20 @@ html[data-contrast="high"] * {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 1;
 }
 .about-hero .hero-bg-half .overlay {
   display: none;
+}
+/* Keep the About hero photo visible on tablet and phone.
+   An earlier responsive rule hides .hero-bg-half at max-width: 991px. */
+@media screen and (max-width: 991px) {
+  .about-hero .hero-bg-half {
+    display: block;
+    position: relative;
+    min-height: 52vh;
+    width: 100%;
+  }
 }
 .about-kicker {
   font-family: 'Montserrat', sans-serif;
@@ -2844,6 +2863,11 @@ html[data-contrast="high"] * {
 .about-wide-figure {
   margin: 0;
 }
+.about-figure picture,
+.about-wide-figure picture {
+  display: block;
+  width: 100%;
+}
 .about-figure img,
 .about-wide-figure img {
   width: 100%;
@@ -2851,6 +2875,7 @@ html[data-contrast="high"] * {
   display: block;
   border-radius: 8px;
   object-fit: cover;
+  opacity: 1;
 }
 .about-figure figcaption,
 .about-wide-figure figcaption {
@@ -2921,7 +2946,10 @@ html[data-contrast="high"] * {
     min-height: auto;
   }
   .about-hero .hero-bg-half {
-    min-height: 46vh;
+    display: block; /* override the older max-width: 991px { display: none } rule */
+    position: relative;
+    min-height: 52vh;
+    width: 100%;
   }
   .about-hero .hero-content-right {
     padding: 2.5rem 1.5rem 3rem;
@@ -3131,8 +3159,8 @@ a.btn-cta-secondary:focus-visible,
 }
 
 @keyframes image-reveal {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
+  from { transform: translateY(18px); }
+  to { transform: translateY(0); }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -3164,7 +3192,8 @@ a.btn-cta-secondary:focus-visible,
   html.anim-ready .animate-on-scroll.visible .content-image,
   html.anim-ready .animate-on-scroll.visible .content-grid img,
   html.anim-ready .animate-on-scroll.visible .puzzle-grid img {
-    animation: image-reveal 0.8s cubic-bezier(0.25, 1, 0.5, 1) both;
+    animation: image-reveal 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    opacity: 1;
   }
 
   html.anim-ready .animate-on-scroll.visible .about-figure img { animation-delay: 0.12s; }
