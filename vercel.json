@@ -1,0 +1,3 @@
+{
+  "buildCommand": "python3 scripts/decode_images.py"
+}
