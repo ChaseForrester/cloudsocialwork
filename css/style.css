@@ -3143,7 +3143,7 @@ a.btn-cta-secondary:focus-visible,
     animation: hero-enter 0.85s cubic-bezier(0.25, 1, 0.5, 1) both;
   }
 
-  html.js .animate-on-scroll:not(.hero-content-right):not(.hero-content):not(.documents-header):not(.events-header) {
+  html.anim-ready .animate-on-scroll:not(.visible):not(.hero-content-right):not(.hero-content):not(.documents-header):not(.events-header) {
     opacity: 0;
     transform: translateY(28px);
     transition: opacity 0.7s cubic-bezier(0.25, 1, 0.5, 1),
@@ -3151,25 +3151,25 @@ a.btn-cta-secondary:focus-visible,
     transition-delay: var(--stagger, 0ms);
   }
 
-  html.js .animate-on-scroll.visible,
-  html.js .animate-on-scroll.hero-content-right,
-  html.js .animate-on-scroll.hero-content {
+  html.anim-ready .animate-on-scroll.visible,
+  html.anim-ready .animate-on-scroll.hero-content-right,
+  html.anim-ready .animate-on-scroll.hero-content {
     opacity: 1;
     transform: none;
   }
 
-  html.js .animate-on-scroll.visible .about-figure img,
-  html.js .animate-on-scroll.visible .about-wide-figure img,
-  html.js .animate-on-scroll.visible .commitment-images img,
-  html.js .animate-on-scroll.visible .content-image,
-  html.js .animate-on-scroll.visible .content-grid img,
-  html.js .animate-on-scroll.visible .puzzle-grid img {
+  html.anim-ready .animate-on-scroll.visible .about-figure img,
+  html.anim-ready .animate-on-scroll.visible .about-wide-figure img,
+  html.anim-ready .animate-on-scroll.visible .commitment-images img,
+  html.anim-ready .animate-on-scroll.visible .content-image,
+  html.anim-ready .animate-on-scroll.visible .content-grid img,
+  html.anim-ready .animate-on-scroll.visible .puzzle-grid img {
     animation: image-reveal 0.8s cubic-bezier(0.25, 1, 0.5, 1) both;
   }
 
-  html.js .animate-on-scroll.visible .about-figure img { animation-delay: 0.12s; }
-  html.js .about-value-card:nth-child(2) { transition-delay: 0.1s; }
-  html.js .about-value-card:nth-child(3) { transition-delay: 0.2s; }
+  html.anim-ready .animate-on-scroll.visible .about-figure img { animation-delay: 0.12s; }
+  html.anim-ready .about-value-card:nth-child(2) { transition-delay: 0.1s; }
+  html.anim-ready .about-value-card:nth-child(3) { transition-delay: 0.2s; }
 
   .btn-cta,
   .btn-cta-secondary,
@@ -3209,7 +3209,7 @@ a.btn-cta-secondary:focus-visible,
 
 @media (prefers-reduced-motion: reduce) {
   .animate-on-scroll,
-  html.js .animate-on-scroll,
+  html.anim-ready .animate-on-scroll,
   .hero-content-right,
   .hero-content,
   .documents-header,
