@@ -2686,3 +2686,214 @@ html[data-contrast="high"] * {
     font-size: 16px;
     line-height: 1.5;
 }
+
+/* === About page long-form layout === */
+.about-hero .hero-bg-half {
+  background-image: none;
+  overflow: hidden;
+}
+.about-hero .hero-bg-half img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.about-hero .hero-bg-half .overlay {
+  display: none;
+}
+.about-kicker {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 1rem;
+}
+.about-hero h1 {
+  font-size: clamp(1.85rem, 3.2vw, 2.7rem);
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+.about-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.85rem;
+  margin-top: 1.75rem;
+}
+.about-cta-center {
+  justify-content: flex-start;
+  max-width: 1100px;
+  margin: 2rem auto 0;
+  padding: 0 2rem 1rem;
+}
+.btn-cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.4rem;
+  border: 1px solid var(--text-color);
+  background: transparent;
+  color: var(--text-color);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: all 0.25s ease;
+}
+.btn-cta-secondary:hover {
+  background: var(--text-color);
+  color: var(--bg-color);
+}
+.about-long-section,
+.about-split-section {
+  padding: 5rem 2rem;
+}
+.about-split-alt {
+  background: var(--secondary-bg);
+}
+.about-prose {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.about-prose h2,
+.about-value-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  margin: 0 0 1.25rem;
+  color: var(--text-color);
+}
+.about-prose p,
+.about-value-card p,
+.about-faq p,
+.about-enquiry-note,
+.about-figure figcaption,
+.about-wide-figure figcaption {
+  font-family: 'Figtree', sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text-color);
+  margin: 0 0 1.15rem;
+}
+.about-prose a,
+.about-faq a {
+  color: var(--text-color);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.about-split {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+.about-split-reverse {
+  direction: rtl;
+}
+.about-split-reverse > * {
+  direction: ltr;
+}
+.about-figure,
+.about-wide-figure {
+  margin: 0;
+}
+.about-figure img,
+.about-wide-figure img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.about-figure figcaption,
+.about-wide-figure figcaption {
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  margin: 0.7rem 0 0;
+}
+.about-values-wrap .about-prose {
+  margin-bottom: 2rem;
+}
+.about-values-grid {
+  max-width: 1100px;
+  margin: 0 auto 3rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.about-value-card {
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  padding: 1.75rem;
+  border-radius: 8px;
+}
+.about-value-card h3 {
+  font-size: 1.6rem;
+}
+.about-wide-figure {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.about-faq {
+  max-width: 760px;
+  margin: 2rem auto 0;
+}
+.about-faq details {
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 0;
+}
+.about-faq summary {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  list-style: none;
+  color: var(--text-color);
+  padding-right: 1.5rem;
+  position: relative;
+}
+.about-faq summary::-webkit-details-marker { display: none; }
+.about-faq summary::after {
+  content: '+';
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 1.25rem;
+  line-height: 1;
+}
+.about-faq details[open] summary::after { content: '–'; }
+.about-faq details p { margin: 0.85rem 0 0.25rem; }
+.enquiry-left .about-enquiry-note {
+  color: inherit;
+  max-width: 28rem;
+  margin: 1rem 0 0;
+}
+@media (max-width: 900px) {
+  .about-hero .grid-wrapper {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .about-hero .hero-bg-half {
+    min-height: 46vh;
+  }
+  .about-hero .hero-content-right {
+    padding: 2.5rem 1.5rem 3rem;
+  }
+  .about-split,
+  .about-values-grid {
+    grid-template-columns: 1fr;
+  }
+  .about-split-reverse {
+    direction: ltr;
+  }
+  .about-long-section,
+  .about-split-section {
+    padding: 3.5rem 1.5rem;
+  }
+}
